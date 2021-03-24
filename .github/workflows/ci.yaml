@@ -51,8 +51,8 @@ jobs:
           [ -f "fail-location" ] || [ -f "fail-filename" ] && exit 1
 
           echo "Obtaining the latest metadata GitHub PR validation tool:"
-          echo "curl -sLO https://hydra.iohk.io/job/Cardano/metadata-server/native.metadataValidatorGitHubTarball.x86_64-linux/latest-finished/download/1/metadata-validator-github.tar.gz"
-          curl -sLO https://hydra.iohk.io/job/Cardano/metadata-server/native.metadataValidatorGitHubTarball.x86_64-linux/latest-finished/download/1/metadata-validator-github.tar.gz
+          echo "curl -sLO https://hydra.iohk.io/build/5871213/download/1/metadata-validator-github.tar.gz"
+          curl -sLO https://hydra.iohk.io/build/5871213/download/1/metadata-validator-github.tar.gz
           echo
 
           echo "Extracting the latest metadata GitHub PR validation tool:"
@@ -66,8 +66,8 @@ jobs:
           echo
 
           echo "Obtaining the latest metadata validation tool:"
-          echo "curl -sLO https://hydra.iohk.io/job/Cardano/cardano-metadata-submitter/native.metadataSubmitterTarball.x86_64-linux/latest-finished/download/1/cardano-metadata-submitter.tar.gz"
-          curl -sLO https://hydra.iohk.io/job/Cardano/cardano-metadata-submitter/native.metadataSubmitterTarball.x86_64-linux/latest-finished/download/1/cardano-metadata-submitter.tar.gz
+          echo "curl -sLO https://hydra.iohk.io/build/5871510/download/1/cardano-metadata-submitter.tar.gz"
+          curl -sLO https://hydra.iohk.io/build/5871510/download/1/cardano-metadata-submitter.tar.gz
           echo
 
           echo "Extracting the latest metadata validation tool:"
@@ -76,5 +76,7 @@ jobs:
 
           echo "Running the metadata validation tool on this PR:"
           echo
-          echo "./cardano-metadata-submitter validate master/$file pull-request/$file"
+          VALIDATOR="./cardano-metadata-submitter validate"
+          echo "${DIFF}" | grep "^M" | awk '{print $2}' | xargs -- bash -c 'echo "$1 master/$2 pull-request/$2" && $1 master/$2 pull-request/$2' -- "$VALIDATOR"
+          echo "${DIFF}" | grep "^A" | awk '{print $2}' | xargs -- bash -c 'echo "$1 pull-request/$2" && $1 pull-request/$2' -- "$VALIDATOR"
           echo
