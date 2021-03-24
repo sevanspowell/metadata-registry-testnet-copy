@@ -28,11 +28,13 @@ jobs:
           export BASE="master"
           export LOCATION="registry"
 
+          pushd pull-request
+          echo "Fetching base branch '${BASE}':"
+          git fetch origin ${BASE} --depth=1
+
           echo "Obtaining PR file change diff:"
           echo
-          ls -lah
-          git --no-pager diff --name-status master/ pull-request/
-          DIFF="$(git --no-pager diff --name-status master/ pull-request/)"
+          DIFF="$(git --no-pager diff --name-status origin/"${BASE}" "${GITHUB_SHA}")"
           export DIFF
           echo "${DIFF}"
           echo
@@ -48,6 +50,7 @@ jobs:
           [ -f "fail-filename" ] && echo "ABORTING: File name validation failed"
           [ -f "fail-location" ] || [ -f "fail-filename" ] && exit 1
 
+          popd
           echo "Obtaining the latest metadata GitHub PR validation tool:"
           echo "curl -sLO https://hydra.iohk.io/build/5871213/download/1/metadata-validator-github.tar.gz"
           curl -sLO https://hydra.iohk.io/build/5871213/download/1/metadata-validator-github.tar.gz
