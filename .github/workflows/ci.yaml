@@ -62,8 +62,8 @@ jobs:
 
           echo "Running the metadata GitHub PR validator on this PR:"
           echo
-          echo "./metadata-validator-github ${GITHUB_REPOSITORY_OWNER} $(cat "${GITHUB_EVENT_PATH}" | jq -r '.repository.name') ${{ github.event.number }} --no-auth"
-          ./metadata-validator-github "${GITHUB_REPOSITORY_OWNER}" "$(cat "${GITHUB_EVENT_PATH}" | jq -r '.repository.name')" "${{ github.event.number }}" --no-auth
+          echo "./metadata-validator-github "${GITHUB_REPOSITORY_OWNER}" "$(cat "${GITHUB_EVENT_PATH}" | jq -r '.repository.name')" "${{ github.event.number }}" --expect-branch "${BASE}" ---no-auth"
+          ./metadata-validator-github "${GITHUB_REPOSITORY_OWNER}" "$(cat "${GITHUB_EVENT_PATH}" | jq -r '.repository.name')" "${{ github.event.number }}" --expect-branch "${BASE}" ---no-auth
           echo
 
           echo "Obtaining the latest metadata validation tool:"
